@@ -1,13 +1,14 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import classnames from 'classnames';
+import { useController } from 'react-hook-form';
 import { isUndefined } from 'lodash';
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { IconDate, IconSearch } from './icons';
 import { colors, fontFamilies } from '../../theme';
-import { useDebouncedCallback } from '../../hooks/debounced-callback';
 import { Text } from '../text';
 import { Spinner } from '../spinner';
+import type { InputType } from '@/types/fields';
+import { defaultInputRules } from '@/utils';
 
 type CallbackRef = (node: HTMLElement) => void;
 
@@ -16,6 +17,7 @@ interface Props {
   debounce?: number;
   defaultValue?: string;
   disabled?: boolean;
+  shouldUnregister?: boolean;
   fieldId?: string;
   height?: number;
   width?: string;
@@ -28,32 +30,16 @@ interface Props {
   invisible?: boolean;
   isInvalid?: boolean;
   maxLength?: number;
-  name?: string;
-  onChange?: ChangeHandler;
+  name: string;
   onFocus?: () => unknown;
-  onBlur?: (value?: string) => unknown;
   placeholder?: string;
   isRequired?: boolean;
   testId?: string;
   type: InputType;
-  value?: string | number | null;
   autoComplete?: 'on' | 'off' | boolean;
   appendText?: string;
   style?: React.CSSProperties;
 }
-
-type ChangeHandler = (value: string) => void;
-type InputType =
-  | 'text'
-  | 'textarea'
-  | 'number'
-  | 'email'
-  | 'tel'
-  | 'select'
-  | 'date'
-  | 'search'
-  | 'react-select'
-  | 'password';
 
 function getIcon(type: InputType): React.ReactNode {
   if (type === 'date') return <IconDate />;
@@ -66,6 +52,7 @@ function InputControl(props: Props): JSX.Element {
     className,
     debounce = 0,
     defaultValue,
+    shouldUnregister,
     disabled,
     fieldId,
     height,
@@ -75,19 +62,25 @@ function InputControl(props: Props): JSX.Element {
     isInvalid,
     maxLength,
     name,
-    onChange,
     onFocus,
-    onBlur,
     placeholder,
     type,
     testId,
     isRequired,
-    value,
     autoComplete = true,
     style,
   } = props;
 
-  const debouncedOnChange = useDebouncedCallback(onChange, debounce);
+  const rules = useMemo(() => defaultInputRules(type, isRequired), [type, isRequired]);
+
+  const {
+    field: { onChange, value, onBlur },
+  } = useController({
+    name,
+    rules,
+    shouldUnregister,
+  });
+
   const isReadOnly = isUndefined(onChange);
 
   // There are some cases where we're using this component in JavaScript files
@@ -96,9 +89,7 @@ function InputControl(props: Props): JSX.Element {
   const normalizedValue = typeof value === 'string' || typeof value === 'number' ? value : undefined;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void {
-    if (debouncedOnChange) {
-      debouncedOnChange(e.target.value);
-    }
+    onChange(e.target.value);
   }
 
   function getTestId(): string | false {
@@ -131,9 +122,7 @@ function InputControl(props: Props): JSX.Element {
         required={isRequired}
         onChange={handleChange}
         onFocus={onFocus}
-        onBlur={(e) => {
-          if (onBlur) onBlur(e.target.value);
-        }}
+        onBlur={onBlur}
         style={style}
       />
     );

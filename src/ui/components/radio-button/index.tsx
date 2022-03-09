@@ -15,7 +15,7 @@ interface Props {
   onChange?: () => unknown;
   testId?: string;
   textSize?: TextSizes;
-  value: string | number;
+  weight?: 300 | 400 | 500 | 600 | 700;
 }
 
 export interface SelectableOption {
@@ -31,8 +31,8 @@ export function RadioButton({
   name,
   onChange,
   testId,
+  weight,
   textSize = 'regular',
-  value,
 }: Props): JSX.Element {
   const id = useMemo(() => uid(), []);
   const color = (): TextColors => {
@@ -51,12 +51,11 @@ export function RadioButton({
             disabled={disabled}
             data-testid={testId}
             id={id}
-            value={value}
             checked={isChecked}
             onChange={onChange}
           />
           <span>
-            <Text size={textSize} color={color()}>
+            <Text weight={weight} size={textSize} color={color()}>
               {label}
             </Text>
           </span>
