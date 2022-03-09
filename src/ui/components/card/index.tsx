@@ -7,25 +7,26 @@ interface Props {
   borderColor?: string;
   backgroundColor?: string;
   overflow?: string;
+  isRounded?: boolean;
 }
 
 export function Card(props: Props): JSX.Element {
-  const { children, borderColor, backgroundColor, overflow = 'hidden' } = props;
+  const { children, borderColor, backgroundColor, overflow = 'hidden', isRounded = true } = props;
 
   return (
-    <StyledCard borderColor={borderColor} backgroundColor={backgroundColor} overflow={overflow}>
+    <StyledCard borderColor={borderColor} backgroundColor={backgroundColor} overflow={overflow} isRounded={isRounded}>
       {children}
     </StyledCard>
   );
 }
 
-const StyledCard = styled.div`
-  background-color: ${({ backgroundColor }: Props) => backgroundColor || 'white'};
-  border: 1px solid ${({ borderColor }: Props) => borderColor || '#dbdbdb'};
-  border-radius: 6px;
+const StyledCard = styled.div<Props>`
+  background-color: ${({ backgroundColor }) => backgroundColor || 'white'};
+  border: 1px solid ${({ borderColor }) => borderColor || '#dbdbdb'};
+  border-radius: ${({ isRounded }) => (isRounded ? 6 : 0)}px;
   box-sizing: border-box;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.03);
-  overflow: ${({ overflow }: Props) => overflow};
+  overflow: ${({ overflow }) => overflow};
 `;
 
 /**
