@@ -44,7 +44,6 @@ export function RadioButtonGroup({
               name={name}
               onChange={() => handleChange(option.value.toString())}
               textColor={textColor}
-              value={option.value}
             />
           </Padding>
         );

@@ -14,7 +14,6 @@ type CallbackRef = (node: HTMLElement) => void;
 
 interface Props {
   className?: string;
-  debounce?: number;
   defaultValue?: string;
   disabled?: boolean;
   shouldUnregister?: boolean;
@@ -50,7 +49,6 @@ function getIcon(type: InputType): React.ReactNode {
 function InputControl(props: Props): JSX.Element {
   const {
     className,
-    debounce = 0,
     defaultValue,
     shouldUnregister,
     disabled,
@@ -149,8 +147,8 @@ function InputControl(props: Props): JSX.Element {
         }}
         onChange={handleChange}
         onFocus={onFocus}
-        onBlur={(e) => {
-          if (onBlur) onBlur(e.target.value);
+        onBlur={() => {
+          if (onBlur) onBlur();
         }}
         autoComplete={autoComplete === true || autoComplete === 'on' ? 'on' : 'off'}
       />
