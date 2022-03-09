@@ -21,6 +21,7 @@ module.exports = {
         'class-methods-use-this': 'off',
         '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
         '@typescript-eslint/no-unused-vars': 'off',
+        'react/require-default-props': 'off',
         // Duplicative of ts:
         'import/no-duplicates': 'off',
         'no-redeclare': 'off',
@@ -57,6 +58,8 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'filenames', 'import', 'jest', 'react-hooks', 'prettier'],
   rules: {
+    'react/jsx-props-no-spreading': 'off',
+    'react/react-in-jsx-scope': 'off',
     'prettier/prettier': ['error', {
       'printWidth': 120,
       'singleQuote': true,
