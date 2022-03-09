@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
-import Select, { FocusEventHandler, InputActionMeta } from 'react-select';
+import Select, { InputActionMeta } from 'react-select';
 import styled from 'styled-components';
 
 import { colors, fontFamilies } from '../../../theme';
@@ -18,7 +18,7 @@ interface Props {
   isLoading?: boolean;
   isMulti?: boolean;
   name?: string;
-  onBlur?: FocusEventHandler;
+  onBlur?: () => void;
   onChange: (value: string | string[]) => unknown;
   onInputChange?: (newValue: string, inputActionMeta: InputActionMeta) => void;
   options?: Option[] | GroupedOptions[];

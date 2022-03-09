@@ -29,7 +29,6 @@ export function PaginationControls({ forcePage, pageCount, onPageChange, testId 
             pageCount={pageCount}
             onPageChange={onPageChange}
             containerClassName="pagination"
-            subContainerClassName="pages pagination"
             activeClassName="active"
             forcePage={forcePage}
           />
